@@ -90,22 +90,21 @@ router.put('/:id', (req, res) => {
     }
   });
 });
-router.put('/:id', (req, res) => {
-  let sql = "UPDATE heroe SET ? WHERE id=?";
-  connection.query(sql, [req.body, req.params.id], (err, results) => {
-    if (err) {
-      res.status(500).send({errorMessage: err.message});
-    } else {
-      sql = "SELECT * FROM heroe WHERE id=?";
-      connection.query(sql, req.params.id, (err, result) => {
-        if (result.length === 0) {
-          res.status(404).send({errorMessage: `heroe with id ${req.params.id} not found`});
-        } else {
-          res.status(200).json(result[0]);
-        }
-      });
+
+router.put("/heroes/ishuman/:id", (req, res) => {
+  const idHuman = req.params.id;
+  connection.query(
+    "UPDATE heroe SET is_human = !is_human WHERE id=?",
+    [idHuman],
+    (err, results) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send("Error updating data...");
+      } else {
+        res.status(200).send("Student updated successfully 🎉");
+      }
     }
-  });
+  );
 });
 
 router.delete('/:id', (req, res) => {
